@@ -1,0 +1,51 @@
+﻿@page "/"
+@using WebClient.Domain
+@inject HttpClient Http
+
+<PageTitle>Centurify</PageTitle>
+
+Enter Weight Today
+<form onsubmit="@HandleSubmit">
+    <input type="text" @bind="Weight"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Weight</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Entries)
+        {
+            <tr>
+                <td>@entry.Weight</td>
+                <td>@entry.Timestamp</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private decimal Weight = 0;
+    private CreateEntryCommand command = new CreateEntryCommand();
+    private List<Entry> Entries = new List<Entry>();
+
+    private async Task HandleSubmit()
+    {
+        command.Weight = Weight;
+        var response = await Http.PostAsJsonAsync("http://localhost:8080/api/Entries", command);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var updatedEntriesResponse = await Http.GetAsync("http://localhost:8080/api/entries");
+            if (updatedEntriesResponse.IsSuccessStatusCode)
+            {
+
+                Entries = await updatedEntriesResponse.Content.ReadFromJsonAsync<List<Entry>>() ?? new List<Entry>();
+            }
+        }
+    }
+}
