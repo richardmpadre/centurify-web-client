@@ -36,11 +36,11 @@ Enter Weight Today
     private async Task HandleSubmit()
     {
         command.Weight = Weight;
-        var response = await Http.PostAsJsonAsync("http://localhost:8080/api/Entries", command);
+        var response = await Http.PostAsJsonAsync("https://localhost:8080/api/Entries", command);
 
         if (response.IsSuccessStatusCode)
         {
-            var updatedEntriesResponse = await Http.GetAsync("http://localhost:8080/api/entries");
+            var updatedEntriesResponse = await Http.GetAsync("https://localhost:8080/api/entries");
             if (updatedEntriesResponse.IsSuccessStatusCode)
             {
 

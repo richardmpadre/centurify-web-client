@@ -3354,3 +3354,4 @@ app/wwwroot/sample-data/weather.json
 /bin/Debug/net8.0/app
 /obj/Debug/net8.0
 *.user
+/.vs/ProjectEvaluation
